@@ -1,0 +1,23 @@
+{
+  "name": "ironmanbot",
+  "version": "1.0.0",
+  "description": "5v5? No problem, 6v6? No problem! Friend too trash at a certain fighting game? 1v6? N O   P R O B L E M.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Johnnydaboy/IronManBot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Johnnydaboy/IronManBot/issues"
+  },
+  "homepage": "https://github.com/Johnnydaboy/IronManBot#readme",
+  "dependencies": {
+    "discord.js": "^12.3.1"
+  },
+  "devDependencies": {}
+}
