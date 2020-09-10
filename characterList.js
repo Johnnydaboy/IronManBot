@@ -63,20 +63,22 @@ module.exports = class characterList {
         while(teamNotFound) {
             var target = Algorithm.getRandVal(min, max);
             console.log("Before forced: " + target);
+
             // 'target' will be lower if '-f' is enabled
-            
             if(forceHighTier) {
                 target = target - 5.5;
                 console.log("After forced: " + target);
             }
             
-            if(target < 6 || target > 27 || forceHighTier)
+            // '-f' disabled
+            if((target < 1 || target > 27) && !forceHighTier)
             {
-                if(forceHighTier || target > 21.5)
-                {
-                    teamNotFound = false;
-                    return "Team composition not possible";
-                }
+                teamNotFound = false;
+                return "Team composition not possible";
+            }
+            // '-f' enabled
+            else if((target < 0.5 || target > 21.5) && forceHighTier)
+            {
                 teamNotFound = false;
                 return "Team composition not possible";
             }
