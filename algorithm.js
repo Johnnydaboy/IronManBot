@@ -1,53 +1,52 @@
 module.exports = class algorithm {
-    static isSubsetSum(set, n, sum, subset, level)
-    {
-        var numCharacters = 5;
-        if (sum == 0 && level == numCharacters ) {
-            //console.log(subset);
-            //System.out.printf("level is %d\n", level);
+
+    /* 
+    Given a specific set of numbers, this algorithm will recursively attempt 
+    to reach a 'subset' of length 'numCharacters' which will add up to the 'sum'. 
+
+    The level tells where to put each element of 'set' into 'subset'.
+    */
+    static isSubsetSum(set, n, sum, subset, level, numCharacters) {
+
+        // Base case, if the 'sum' is met and the 'level' matches 'numCharacters', return 'true';
+        if(sum == 0 && level == numCharacters ) {
             return true;
         }
-        // return false if sum is met, but the array is not filled
-        if (sum == 0 && level < numCharacters ) {
+        // Base case, return 'false' if 'sum' is met, but the array is not filled to 'numCharacters'
+        if(sum == 0 && level < numCharacters ) {
             return false;
         }
-        // If level is greater than the numCharacters, return false so it doesn't over populate subset
-        if (level >= numCharacters)
-        {
+        // If 'level' is greater than the 'numCharacters', return 'false' to prevent Array Out of Bounds
+        if(level >= numCharacters) {
             return false;
         }
-        // return false if there are no more elements in set to look at
-        if (n == 0) {
+        // return 'false' if there are no more elements 'n' in 'set' to look at
+        if(n == 0) {
             return false;
         }
 
-        // If the current element @n - 1 is bigger than the sum, ignore it
-        if (set[n - 1] > sum) {
+        // If the current element @n - 1 is bigger than the sum, ignore it, move onto the next number in the set
+        if(set[n - 1] > sum) {
             //System.out.println("HERE!");
-            return this.isSubsetSum(set, n - 1, sum, subset, level);
+            return this.isSubsetSum(set, n - 1, sum, subset, level, numCharacters);
         }
 
+        // Set the current 'subset' @level to the current value of set which we are looking at
+        // The value will be replaced as certain conditions in each branch is not met
         subset[level] = set[n - 1];
-        //System.out.printf("subset[level]: %d\n", subset[level]);
-        //System.out.printf("level: %d\n", level);
-        ////printArr(subset);
-        // Branches left until a A) the sum is not met and will return false or B) the sum is met and will return true
-        //
-        //double[] newArr = copyArr(set, n - 1);
-        //System.out.println("newArr is: ");
-        ////printArr(newArr);
 
-        return this.isSubsetSum(set, n-1, sum - set[n - 1], subset, level + 1)
-                || this.isSubsetSum(set, n - 1, sum, subset, level);
+        // Branches left and right until a A) the 'sum' is not met and will return 'false' or B) the 'sum' is met and will return 'true'
+        return this.isSubsetSum(set, n-1, sum - set[n - 1], subset, level + 1, numCharacters)
+                || this.isSubsetSum(set, n - 1, sum, subset, level, numCharacters);
     }
 
-    static getRandVal(min, max)
-    {
+    // A method which returns a random value between 'min' and 'max' rounded to the nearest 0.5
+    static getRandVal(min, max) {
         var range = max - min;
         var value = Math.random() * range + min;
-        console.log(value);
+        console.log("not rounded: " + value);
         var value = Math.round((value * 2))/2.0;
-        console.log(value);
+        console.log("rounded: " + value);
         return value;
     }
 }

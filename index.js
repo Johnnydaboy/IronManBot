@@ -1,10 +1,9 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const {prefix, token} = require('./config.json');
-const CharacterList = require("./characterList.js")
+const CharacterList = require("./characterList.js");
 
 client.once('ready', () => {
-    
 	console.log('Ready!');
 });
 
@@ -21,21 +20,34 @@ client.on('message', message => {
     else if(splitMsg[0] === prefix + 'ironman') {
         var min;
         var max;
-        if(splitMsg.length > 2 && !isNaN(splitMsg[1]) && !isNaN(splitMsg[2]))
-        {
+        var forceHighTier = false;
+
+        // !ironman 5 10 -f
+        if (splitMsg.length > 2 && !isNaN(splitMsg[1]) && !isNaN(splitMsg[2])) {
+            if (splitMsg.length > 3 && splitMsg[3] === '-f') {
+                forceHighTier = true;
+            }
             var min = splitMsg[1];
             var max = splitMsg[2];
         }
-        else if(splitMsg.length > 1 && !isNaN(splitMsg[1]))
-        {
+        // !ironman 10 -f
+        else if (splitMsg.length > 1 && !isNaN(splitMsg[1])) {
+            if (splitMsg.length > 2 && splitMsg[2] === '-f') {
+                forceHighTier = true;
+            }
             var min = splitMsg[1];
             var max = splitMsg[1];
         }
-        else
-        {
+        // !ironman -f
+        else {
+            if (splitMsg[1] === '-f') {
+                forceHighTier = true;
+            }
             var min = 10.5;
             var max = 10.5;
         }
+
+        // Find a better way to implement commands from the prompt for '-f' setting etc.
 
         var placeHolderCharsOriginal = 
         [5.5, 5.5, 5.5, 5.5, 5, 5, 5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2, 2, 2, 1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0, 0, 0];
@@ -50,7 +62,7 @@ client.on('message', message => {
         // send back character list
         let characterList = new CharacterList(placeHolderCharsOriginal, characterNameA, characterNameB, 
             characterNameC, characterNameD, characterNameE, characterNameF, characterNameG);
-        var cList = characterList.generateTeamBin(min, max);
+        var cList = characterList.generateTeamBin(min, max, forceHighTier);
 
         message.channel.send("```" + cList + "```");
         /*
