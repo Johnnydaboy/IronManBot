@@ -70,10 +70,29 @@ module.exports = class characterList {
                 console.log("After forced: " + target);
             }
             
+            if(target < 6 || target > 27 || forceHighTier)
+            {
+                if(forceHighTier || target > 21.5)
+                {
+                    teamNotFound = false;
+                    return "Team composition not possible";
+                }
+                teamNotFound = false;
+                return "Team composition not possible";
+            }
             if(Algorithm.isSubsetSum(placeHolderChars, placeHolderChars.length, target, charArrInt, level, 5))
             {
                 teamNotFound = false;
-            }
+            }            
+
+            // This isn't very smart but it's a temporary solution to !ironman 6 -f
+            for(i = 0; i < placeHolderChars.length; i++) {
+                var index = Math.floor(Math.random() *  (i + 1))
+    
+                var temp = placeHolderChars[index];
+                placeHolderChars[index] = placeHolderChars[i];
+                placeHolderChars[i] = temp;
+            } 
         }
 
         // Get a match and reset the character arrays of different tiers
