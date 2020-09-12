@@ -18,8 +18,8 @@ client.on('message', message => {
         message.channel.send('Pong.');
     }
     else if(splitMsg[0] === prefix + 'ironman') {
-        var min;
-        var max;
+        var min = 0;
+        var max = 0;
         var forceHighTier = false;
 
         // !ironman 5 10 -f
@@ -35,6 +35,7 @@ client.on('message', message => {
             if (splitMsg.length > 2 && splitMsg[2] === '-f') {
                 forceHighTier = true;
             }
+            console.log("splitmsg[1]: "+ splitMsg[1]);
             var min = splitMsg[1];
             var max = splitMsg[1];
         }

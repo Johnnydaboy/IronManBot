@@ -43,10 +43,10 @@ module.exports = class algorithm {
     // A method which returns a random value between 'min' and 'max' rounded to the nearest 0.5
     static getRandVal(min, max) {
         var range = max - min;
-        var value = Math.random() * range + min;
-        console.log("not rounded: " + value);
+        var value = (Math.random() * range) + min;
+        console.log(`not rounded: ${value}`);
         var value = Math.round((value * 2))/2.0;
         console.log("rounded: " + value);
-        return value;
+        return value;   
     }
 }
