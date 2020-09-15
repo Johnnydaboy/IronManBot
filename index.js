@@ -25,6 +25,25 @@ client.on('message', message => {
         // send back "Pong." to the channel the message was sent in
         message.channel.send('Pong.');
     }
+    else if(message.content === prefix + 'help') {
+        message.channel.send("```" + 
+        "Commands: \n\n" +
+
+        "!ironman\n" +
+           "Returns you a random team comp that adds up to 10.5\n\n" +
+        
+        "!ironman #\n" +
+           "Returns you a random team comp that adds up to #\n\n" +
+        
+        "!ironman # #\n" +
+           "Returns you a random team comp between # & # that adds up to #\n\n\n" +
+        
+        "Additional settings: !ironman [] [] []\n\n" +
+        
+        "-f\n" +
+           "Forces a high tier character in your team comp\n" +
+        "```");
+    }
     else if(splitMsg[0] === prefix + 'ironman') {
         var min = 0;
         var max = 0;
@@ -103,9 +122,14 @@ async function getMatch(message, min, max, forceHighTier) {
     console.log(binTiers);
 
     let characterList = new CharacterList(charValue, charBins, binTiers);
-    let cList = characterList.generateTeamBin(min, max, 5, forceHighTier);
+    let [cList, teamArrInt] = characterList.generateTeamBin(min, max, 5, forceHighTier);
 
-    message.channel.send("```" + cList + "```");
+    let combined = [];
+
+    for(let i = 0; i < cList.length; i++) {
+        combined.push(cList[i] + "[" + teamArrInt[i] + "]");
+    }
+    message.channel.send("```" + combined + "```");
 }
 
 async function connectToDatabase() {

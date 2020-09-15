@@ -39,47 +39,6 @@ module.exports = class characterList {
             tempCharValues.splice(tempCharValues.indexOf(5.5), 1);
         }
 
-        //let teamNotFound = true;
-
-        // Caculate lowest possible min and max based on 'this.charValues'
-        
-        /*
-        let lowestMin = 0;
-        let highestMax = 0;
-
-        console.log("howmanychars: ", howManyChars);
-        if(forceHighTier) {
-            for(let i = 1; i < howManyChars; i++) {
-                highestMax = highestMax + this.charValues[i];
-            }
-
-            for(let i = this.charValues.length - 1; i > this.charValues.length - howManyChars; i--) {
-                lowestMin = lowestMin + this.charValues[i];
-            }
-
-            highestMax = highestMax + this.charValues[0];
-            lowestMin = lowestMin + this.charValues[0];
-
-        } else {
-            
-            for(let i = 0; i < howManyChars; i++) {
-                highestMax = highestMax + this.charValues[i];
-            }
-
-            for(let i = this.charValues.length - 1; i >= this.charValues.length - howManyChars; i--) {
-                lowestMin = lowestMin + this.charValues[i];
-            }
-        }
-
-        if(min < lowestMin || max > highestMax) {
-            //teamNotFound = false;
-            return "Team composition not possible";
-        }
-        
-        console.log("lowestMin: ", lowestMin);
-        console.log("highestMax: ", highestMax);
-        */
-        
         let target = Algorithm.getRandVal(min, max);
         console.log("Before forced: " + target);
 
@@ -108,7 +67,7 @@ module.exports = class characterList {
         console.log(teamArrInt);
         console.log(cList);
 
-        return cList;
+        return [cList, teamArrInt];
     }
 
     /*
