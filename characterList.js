@@ -1,4 +1,3 @@
-const { SystemChannelFlags } = require("discord.js");
 const Algorithm = require("./algorithm.js")
 
 module.exports = class characterList {
@@ -40,10 +39,11 @@ module.exports = class characterList {
             tempCharValues.splice(tempCharValues.indexOf(5.5), 1);
         }
 
-        let teamNotFound = true;
+        //let teamNotFound = true;
 
         // Caculate lowest possible min and max based on 'this.charValues'
         
+        /*
         let lowestMin = 0;
         let highestMax = 0;
 
@@ -72,44 +72,30 @@ module.exports = class characterList {
         }
 
         if(min < lowestMin || max > highestMax) {
-            teamNotFound = false;
+            //teamNotFound = false;
             return "Team composition not possible";
         }
         
         console.log("lowestMin: ", lowestMin);
         console.log("highestMax: ", highestMax);
+        */
         
-        //!!! NEEDS FIXING
-        //!!! Will infintely loop if the team comp doesn't exist, needs to be fixed
-        //!!! !ironman 6 -f will loop even though a team comp is possible
-        //!!! !ironman 6 -f is caused by a [0, 0, 0] subset in algorithm, patching needed
-        while(teamNotFound) {
-            let target = Algorithm.getRandVal(min, max);
-            console.log("Before forced: " + target);
+        let target = Algorithm.getRandVal(min, max);
+        console.log("Before forced: " + target);
 
-            // 'target' will be lower if '-f' is enabled
-            if(forceHighTier) {
-                target = target - 5.5;
-                console.log("After forced: " + target);
-            }
-            
-            let teamToFind = 5;
-            if(forceHighTier) {
-                teamToFind--;
-            }
+        // 'target' will be lower if '-f' is enabled
+        if(forceHighTier) {
+            target = target - 5.5;
+            console.log("After forced: " + target);
+        }
+        
+        let teamToFind = 5;
+        if(forceHighTier) {
+            teamToFind--;
+        }
 
-            if(Algorithm.isSubsetSum(tempCharValues, tempCharValues.length, target, teamArrInt, 0, teamToFind)) {
-                teamNotFound = false;
-            }
-            
-            // This isn't very smart but it's a temporary solution to !ironman 6 -f
-            for(let i = 0; i < tempCharValues.length; i++) {
-                var index = Math.floor(Math.random() *  (i + 1))
-    
-                var temp = tempCharValues[index];
-                tempCharValues[index] = tempCharValues[i];
-                tempCharValues[i] = temp;
-            } 
+        if(!(Algorithm.isSubsetSum(tempCharValues, tempCharValues.length, target, teamArrInt, 0, teamToFind))) {
+            return "Team composition does not exist";
         }
 
         if(forceHighTier) {

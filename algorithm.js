@@ -7,15 +7,17 @@ module.exports = class algorithm {
     The level tells where to put each element of 'set' into 'subset'.
     */
     static isSubsetSum(set, n, sum, subset, level, numCharacters) {
-        console.log("set: ", set);
-        console.log("subset: ", subset);
+        //console.log("set: ", set);
+        //console.log("subset: ", subset);
 
         // Base case, if the 'sum' is met and the 'level' matches 'numCharacters', return 'true';
         if(sum == 0 && level == numCharacters ) {
             return true;
         }
         // Base case, return 'false' if 'sum' is met, but the array is not filled to 'numCharacters'
-        if(sum == 0 && level < numCharacters ) {
+        // Also needs to check that n == 0 so that the last possible solution can be sought out
+        // !!! FIGURE OUT WHY n == 0 WORKS
+        if(sum == 0 && level < numCharacters && n == 0) {
             return false;
         }
         // If 'level' is greater than the 'numCharacters', return 'false' to prevent Array Out of Bounds
