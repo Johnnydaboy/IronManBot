@@ -1,10 +1,10 @@
-const { reject } = require('async');
-const { SystemChannelFlags } = require('discord.js');
-const { connect } = require('mysql2');
-const mysql      = require('mysql2/promise');
+//const { reject } = require('async');
+//const { SystemChannelFlags } = require('discord.js');
+const { connect } = require('mysql');
+//const mysql      = require('mysql2/promise');
 const {mysqlPass} = require('./config.json');
 
-
+/*
 async function connectToDatabase() {
 	const connection = await mysql.createConnection({
 		host     : 'localhost',
@@ -32,7 +32,10 @@ async function connectToDatabase() {
 		console.log("in row ", i, userRows[0][i]);
 	}
 }
+*/
+//connectToDatabase();
 
+// whoops
 /*
 function getValues(){
 	return new Promise((resolve, reject) => {
@@ -50,10 +53,14 @@ function getValues(){
 }
 */
 
-connectToDatabase();
-	
- 
-/*
+
+const connection = mysql.createConnection({
+    host     : 'localhost',
+    user     : 'jonathan',
+    password : mysqlPass,
+    database : 'test',
+});
+
 connection.connect(function(err) {
     console.log("Start of connection");
     if (err) {
@@ -61,27 +68,23 @@ connection.connect(function(err) {
       return;
     }
  
-	console.log('connected as id ' + connection.threadId);
-});
-*/
-
-    //var sql = "CREATE TABLE characters (name VARCHAR(64), value FLOAT)";
-    /*
+    console.log('connected as id ' + connection.threadId);
+  
+    var sql = "CREATE TABLE characters (name VARCHAR(64), value FLOAT)";
+    
     connection.query(sql, function(err, results, fields){
-      if(err) throw err;
-      console.log("Table Created");
+        if(err) throw err;
+        console.log("Table Created");
     });
-    */
-
-    /*
+    
+    
     var sql = "ALTER TABLE characters ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY";
-      connection.query(sql, function (err, result) {
+    connection.query(sql, function (err, result) {
         if (err) throw err;
         console.log("Table altered");
-      });
-    */
-
-    /*
+    });
+    
+    
     var characterNameA = ["Sheik", "Puff", "Peach", "Marth"]; // 5.5
     var characterNameB = ["Fox", "Falco", "Falcon"]; // 5
     var characterNameC = ["Ganon", "Yoshi", "Pikachu", "Doc", "Luigi", "Samus"]; // 2.5
@@ -118,7 +121,9 @@ connection.connect(function(err) {
       if (err) throw err;
       console.log("Number of records inserted: " + results.affectedRows);
     });
-    */ 
+    
+});
+
 
 
 /*
