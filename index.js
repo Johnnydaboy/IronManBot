@@ -1,13 +1,21 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const {prefix, token} = require('./config.json');
+const {prefix, token, mysqlPass} = require('./config.json');
 const CharacterList = require("./characterList.js");
 
+const { SystemChannelFlags } = require('discord.js');
+const { Sequelize, QueryTypes } = require('sequelize');
+const sequelize = new Sequelize('test', 'jonathan', '0@MIjR$K!BEZ', {
+    host: 'localhost',
+    dialect: 'mysql'
+});
+
 client.once('ready', () => {
-	console.log('Ready!');
+    console.log('Ready!');
 });
 
 client.on('message', message => {
+
     console.log(message.content);
     var messageArr = [];
     var msg = message.content;
@@ -49,29 +57,68 @@ client.on('message', message => {
         }
 
         // Find a better way to implement commands from the prompt for '-f' setting etc.
-
-        var placeHolderCharsOriginal = 
-        [5.5, 5.5, 5.5, 5.5, 5, 5, 5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2, 2, 2, 1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0, 0, 0];
-        var characterNameA = ["Sheik", "Puff", "Peach", "Marth"];
-        var characterNameB = ["Fox", "Falco", "Falcon"];
-        var characterNameC = ["Ganon", "Yoshi", "Pikachu", "Doc", "Luigi", "Samus"];
-        var characterNameD = ["DK", "Mario", "Icies"];
-        var characterNameE = ["YL", "Link", "G&W"];
-        var characterNameF = ["Roy", "Mewtwo", "Zelda", "Pichu"];
-        var characterNameG = ["Ness", "Kirby", "Bowser"];
-
-        // send back character list
-        let characterList = new CharacterList(placeHolderCharsOriginal, characterNameA, characterNameB, 
-            characterNameC, characterNameD, characterNameE, characterNameF, characterNameG);
-        var cList = characterList.generateTeamBin(min, max, forceHighTier);
-
-        message.channel.send("```" + cList + "```");
-        /*
-        for(var i = 0; i < 100; i++) {
-            characterList.generateTeamBin(8, 15);
-        }
-        */
+        
+        getMatch(message, min, max, forceHighTier);
     }
 });
 
 client.login(token);
+
+// asynchronous functions
+
+async function getMatch(message, min, max, forceHighTier) {
+
+    let [charName, charValue] = await connectToDatabase();
+    console.log(charName, charValue);
+
+    // This value stores the arrays of arrays of binned characters
+    let charBins = [];
+    // Start of with the first value as the top most bin
+    let curBinValue = charValue[0];
+    // Create empty array to store all characters with the same point value
+    let curBin = [];
+    // Create bin tiers to use for later
+    let binTiers = [];
+    binTiers.push(curBinValue);
+
+    for(let i = 0; i < charValue.length; i++) {
+        // If a character has the same point value, bin it with the 'curBin'
+        if(charValue[i] == curBinValue) {
+            curBin.push(charName[i]);
+        } 
+        // Once we find a different point value character push 'curBin' into 'charBins' and set a new 'curBinValue' for 'curBIn'
+        else {
+            charBins.push(curBin);
+            binTiers.push(charValue[i]);
+            curBin = [];
+            curBinValue = charValue[i];
+            curBin.push(charName[i]);
+        }
+    }
+    // To avoid fence posting, pusht the last binned characters inside 'curBin' to 'charBins'
+    charBins.push(curBin);
+
+    console.log(charBins);
+    // !!! Check why binTiers doesn't have to be pushed again;
+    console.log(binTiers);
+
+    let characterList = new CharacterList(charValue, charBins, binTiers);
+    let cList = characterList.generateTeamBin(min, max, 5, forceHighTier);
+
+    message.channel.send("```" + cList + "```");
+}
+
+async function connectToDatabase() {
+
+    let rowsKey = await sequelize.query("SELECT * FROM characters", { type: QueryTypes.SELECT });
+    let rowsValue = [];
+    let rowsName = [];
+    for(let i = 0; i < rowsKey.length; i++) {
+        rowsValue.push(rowsKey[i].value);
+        rowsName.push(rowsKey[i].name);
+    }
+
+    console.log(rowsName, rowsValue);
+
+    return [rowsName, rowsValue];
+}

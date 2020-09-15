@@ -7,6 +7,8 @@ module.exports = class algorithm {
     The level tells where to put each element of 'set' into 'subset'.
     */
     static isSubsetSum(set, n, sum, subset, level, numCharacters) {
+        console.log("set: ", set);
+        console.log("subset: ", subset);
 
         // Base case, if the 'sum' is met and the 'level' matches 'numCharacters', return 'true';
         if(sum == 0 && level == numCharacters ) {
@@ -44,9 +46,9 @@ module.exports = class algorithm {
     static getRandVal(min, max) {
         var range = max - min;
         var value = (Math.random() * range) + min;
-        console.log(`not rounded: ${value}`);
+        console.log("not rounded: ", value);
         var value = Math.round((value * 2))/2.0;
-        console.log("rounded: " + value);
+        console.log("rounded: ", value);
         return value;   
     }
 }
