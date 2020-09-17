@@ -54,6 +54,7 @@ module.exports = class characterList {
         }
 
         if(!(Algorithm.isSubsetSum(tempCharValues, tempCharValues.length, target, teamArrInt, 0, teamToFind))) {
+            // Needs to be []
             return "Team composition does not exist";
         }
 
@@ -67,6 +68,7 @@ module.exports = class characterList {
         console.log(teamArrInt);
         console.log(cList);
 
+        // Figure out a different way to return them as one packet so the error call can still work
         return [cList, teamArrInt];
     }
 
@@ -78,11 +80,16 @@ module.exports = class characterList {
     {
         let charList = [];
 
+
+        // Loops for 'teamArrInt.length', finding a character that corresponds to that value
         for(let curCharVal = 0; curCharVal < teamArrInt.length; curCharVal++) {
             let getChar = 0;
+
             console.log("charrArr[" + curCharVal + "] " + teamArrInt[curCharVal]);
 
+            // Loops through each bin tier, checks if a value in 'teamArrInt' corresponds to one in 'binTiers'
             for(let binVal = 0; binVal < this.binTiers.length; binVal++) {
+                // Once it finds a corresponding value, move a random character from 'charBin' to 'charList'
                 if(teamArrInt[curCharVal] == this.binTiers[binVal]) {
                     getChar = Math.floor(Math.random() * this.charBin[binVal].length);
                     charList.push(this.charBin[binVal][getChar]);
@@ -90,6 +97,7 @@ module.exports = class characterList {
                     console.log(this.charBin[binVal]);
                     console.log(getChar, this.charBin[binVal][getChar]);
 
+                    // removes the character from 'charBin'
                     this.charBin[binVal].splice(getChar, 1);                    
                 }
             }

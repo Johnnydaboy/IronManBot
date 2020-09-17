@@ -16,7 +16,7 @@ module.exports = class algorithm {
         }
         // Base case, return 'false' if 'sum' is met, but the array is not filled to 'numCharacters'
         // Also needs to check that n == 0 so that the last possible solution can be sought out
-        // !!! FIGURE OUT WHY n == 0 WORKS
+        // !!! FIGURE OUT WHY n == 0 WORK
         if(sum == 0 && level < numCharacters && n == 0) {
             return false;
         }

@@ -122,14 +122,19 @@ async function getMatch(message, min, max, forceHighTier) {
     console.log(binTiers);
 
     let characterList = new CharacterList(charValue, charBins, binTiers);
-    let [cList, teamArrInt] = characterList.generateTeamBin(min, max, 5, forceHighTier);
+    let arrTeamList = characterList.generateTeamBin(min, max, 5, forceHighTier);
 
-    let combined = [];
+    if(!(Array.isArray(arrTeamList))){
+        message.channel.send("```" + arrTeamList + "```");
+    } else {
+        let combined = [];
 
-    for(let i = 0; i < cList.length; i++) {
-        combined.push(cList[i] + "[" + teamArrInt[i] + "]");
+        for(let i = 0; i < arrTeamList[0].length; i++) {
+            combined.push(arrTeamList[0][i] + "[" + arrTeamList[1][i] + "]");
+        }
+
+        message.channel.send("```" + combined + "```");
     }
-    message.channel.send("```" + combined + "```");
 }
 
 async function connectToDatabase() {
