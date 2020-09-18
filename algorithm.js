@@ -16,7 +16,6 @@ module.exports = class algorithm {
         }
         // Base case, return 'false' if 'sum' is met, but the array is not filled to 'numCharacters'
         // Also needs to check that n == 0 so that the last possible solution can be sought out
-        // !!! FIGURE OUT WHY n == 0 WORK
         if(sum == 0 && level < numCharacters && n == 0) {
             return false;
         }
@@ -66,8 +65,10 @@ module.exports = class algorithm {
             // To find the middle of an even dataset we will take the left and right value
             let right = length/2;
             let left = right - 1;
-            console.log("left index ", left, " is ", arr[left]);
-            console.log("right index ", right, " is ", arr[right]);
+
+            //console.log("left index ", left, " is ", arr[left]);
+            //console.log("right index ", right, " is ", arr[right]);
+
             // Average the two left and right values
             //median = (arr[left] + arr[right])/2;
             median = (left + right)/2;
@@ -81,7 +82,9 @@ module.exports = class algorithm {
         else {
             // Get the center
             let middle = (length - 1) / 2;
-            console.log("median index ", middle, " is ", arr[middle]);
+
+            //console.log("median index ", middle, " is ", arr[middle]);
+
             //median = arr[middle];
             median = middle;
 
@@ -101,20 +104,24 @@ module.exports = class algorithm {
         if(lengthQ1 % 2 == 0) {
             let right = lengthQ1/2;
             let left = right - 1;
-            console.log("left index Q1 ", left, " is ", arr[left]);
-            console.log("right index Q1 ", right, " is ", arr[right]);
+
+            //console.log("left index Q1 ", left, " is ", arr[left]);
+            //console.log("right index Q1 ", right, " is ", arr[right]);
+
             //q1 = (arr[left] + arr[right])/2;
             q1 = (left + right)/2;
         } 
         // If the dataset is odd, Q1 will be the center
         else {
             let middle = (lengthQ1 - 1) / 2;
-            console.log("median index Q1 ", middle, " is ", arr[middle]);
+
+            //console.log("median index Q1 ", middle, " is ", arr[middle]);
+
             //q1 = arr[middle];
             q1 = middle;
         }
 
-        console.log("q1 ", q1);
+        //console.log("q1 ", q1);
 
         let q3 = -1;
 
@@ -122,20 +129,24 @@ module.exports = class algorithm {
         if((arr.length - lengthQ3) % 2 == 0) {
             let right = (arr.length + lengthQ3)/2;
             let left = right - 1;
-            console.log("left index Q3 ", left, " is ", arr[left]);
-            console.log("right index Q3 ", right, " is ", arr[right]);
+
+            //console.log("left index Q3 ", left, " is ", arr[left]);
+            //console.log("right index Q3 ", right, " is ", arr[right]);
+
             //q3 = (arr[left] + arr[right])/2;
             q3 = (left + right)/2;
         } 
         // If the theoretical subarray if odd, Q3 will be the center
         else {
             let middle = (arr.length + lengthQ3 - 1) / 2;
-            console.log("median index Q3 ", middle, " is ", arr[middle]);
+            
+            //console.log("median index Q3 ", middle, " is ", arr[middle]);
+            
             //q3 = arr[middle];
             q3 = middle;
         }
 
-        console.log("q3 ", q3, "\n\n");
+        //console.log("q3 ", q3, "\n\n");
 
         console.log(arr);
         console.log("median ", median);

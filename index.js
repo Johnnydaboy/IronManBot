@@ -5,7 +5,7 @@ const CharacterList = require("./characterList.js");
 
 const { SystemChannelFlags } = require('discord.js');
 const { Sequelize, QueryTypes } = require('sequelize');
-const sequelize = new Sequelize('test', 'jonathan', '0@MIjR$K!BEZ', {
+const sequelize = new Sequelize('test', 'jonathan', mysqlPass, {
     host: 'localhost',
     dialect: 'mysql'
 });
@@ -38,10 +38,18 @@ client.on('message', message => {
         "!ironman # #\n" +
            "Returns you a random team comp between # & # that adds up to #\n\n\n" +
         
-        "Additional settings: !ironman [] [] []\n\n" +
+        "Additional settings: !ironman [] [] [] (Tac it on to any of the above commands)\n\n" +
         
-        "-f\n" +
-           "Forces a high tier character in your team comp\n" +
+        "-h\n" +
+            "Forces a high tier character in your team comp\n" +
+
+        "-m\n" + 
+            "Forces a mid tier character in your team comp\n" + 
+
+        "-l\n" +
+            "Forces a low tier character in your team comp\n\n" + 
+
+        "Thank god I did argument parsing back in my C days, makes adding settings like this look like a joke" +
         "```");
     }
     else if(splitMsg[0] === prefix + 'ironman') {
@@ -52,7 +60,7 @@ client.on('message', message => {
         let checkForced = ['-h', '-m', '-l'];
         let forceCharTier = [false, false, false]; 
 
-        // !ironman 5 10 -f
+        // !ironman 5 10 -h -m -l
         if (splitMsg.length > 2 && !isNaN(splitMsg[1]) && !isNaN(splitMsg[2])) {
 
             // Check if anymore arguments exist
@@ -70,7 +78,7 @@ client.on('message', message => {
             min = splitMsg[1];
             max = splitMsg[2];
         }
-        // !ironman 10 -f
+        // !ironman 10 -h -m -l
         else if (splitMsg.length > 1 && !isNaN(splitMsg[1])) {
 
             // Check if anymore arguments exist
@@ -88,12 +96,10 @@ client.on('message', message => {
             min = splitMsg[1];
             max = splitMsg[1];
         }
-        // !ironman -f
+        // !ironman -h -m -l
         else {
-            console.log("entered here");
             // Check if anymore arguments exist
             if (splitMsg.length > 1) {
-                console.log("entered here 2");
                 // If arguments exist, compare them to 'checkForced'
                 for(let i = 1; i < splitMsg.length; i++) {
                     // If 'splitMsg[i]' is in 'checkForced', set the corresponding boolean to true
@@ -123,7 +129,7 @@ client.login(token);
 async function getMatch(message, min, max, forceCharTier) {
 
     let [charName, charValue] = await connectToDatabase();
-    console.log(charName, charValue);
+    //console.log(charName, charValue);
 
     // This value stores the arrays of arrays of binned characters
     let charBins = [];
@@ -154,11 +160,12 @@ async function getMatch(message, min, max, forceCharTier) {
 
     //console.log(charBins);
     // !!! Check why binTiers doesn't have to be pushed again;
-    console.log(binTiers);
+    //console.log(binTiers);
 
     let characterList = new CharacterList(charValue, charBins, binTiers);
     let arrTeamList = characterList.generateTeamBin(min, max, 5, forceCharTier);
 
+    // Check it it is not an array to send error message
     if(!(Array.isArray(arrTeamList))){
         message.channel.send("```" + arrTeamList + "```");
     } else {

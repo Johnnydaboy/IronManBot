@@ -43,21 +43,8 @@ module.exports = class characterList {
 
         let level = 0;
         let target = Algorithm.getRandVal(min, max);
-        console.log("Before forced: " + target);
-
-        // 'target' will be lower if '-f' is enabled
-        /*
-        if(forceHighTier) {
-            target = target - 5.5;
-            console.log("After forced: " + target);
-        }
-        */
         
-        /*
-        if(forceHighTier) {
-            howManyChars--;
-        }
-        */
+        console.log("Before forced: " + target);
 
         [target, level] = this.forceChars(forceCharTier, tempCharValues, teamArrInt, target, level);
 
@@ -68,12 +55,6 @@ module.exports = class characterList {
         if(!(Algorithm.isSubsetSum(tempCharValues, tempCharValues.length, target, teamArrInt, level, howManyChars))) {
             return "Team composition does not exist";
         }
-
-        /*
-        if(forceHighTier) {
-            teamArrInt.push(5.5);
-        }
-        */
 
         // Get a match and reset the character arrays of different tiers
         var cList = this.getMatch(teamArrInt);
