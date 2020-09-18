@@ -14,7 +14,13 @@ Commands:
 !ironman # #
 // Returns you a random team comp between # & # that adds up to #
 
-Additional settings:
+Additional settings: !ironman [] [] [] (Tac it on to any of the above commands)
 
--f 
-// Forces a high tier character in your team comp
+-h
+//Forces a high tier character in your team comp
+
+-m
+//Forces a mid tier character in your team comp
+
+-l
+//Forces a low tier character in your team comp 
