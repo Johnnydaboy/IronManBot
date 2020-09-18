@@ -45,39 +45,74 @@ client.on('message', message => {
         "```");
     }
     else if(splitMsg[0] === prefix + 'ironman') {
-        var min = 0;
-        var max = 0;
-        var forceHighTier = false;
+        let min = 0;
+        let max = 0;
+        let forceHighTier = false;
+        // [high, mid, low];
+        let checkForced = ['-h', '-m', '-l'];
+        let forceCharTier = [false, false, false]; 
 
         // !ironman 5 10 -f
         if (splitMsg.length > 2 && !isNaN(splitMsg[1]) && !isNaN(splitMsg[2])) {
-            if (splitMsg.length > 3 && splitMsg[3] === '-f') {
-                forceHighTier = true;
+
+            // Check if anymore arguments exist
+            if (splitMsg.length > 3) {
+                // If arguments exist, compare them to 'checkForced'
+                for(let i = 3; i < splitMsg.length; i++) {
+                    // If 'splitMsg[i]' is in 'checkForced', set the corresponding boolean to true
+                    for(let j = 0; j < checkForced.length; j++) { 
+                        if(splitMsg[i] === checkForced[j]) {
+                            forceCharTier[j] = true;
+                        }
+                    }
+                }
             }
-            var min = splitMsg[1];
-            var max = splitMsg[2];
+            min = splitMsg[1];
+            max = splitMsg[2];
         }
         // !ironman 10 -f
         else if (splitMsg.length > 1 && !isNaN(splitMsg[1])) {
-            if (splitMsg.length > 2 && splitMsg[2] === '-f') {
-                forceHighTier = true;
+
+            // Check if anymore arguments exist
+            if (splitMsg.length > 2) {
+                // If arguments exist, compare them to 'checkForced'
+                for(let i = 2; i < splitMsg.length; i++) {
+                    // If 'splitMsg[i]' is in 'checkForced', set the corresponding boolean to true
+                    for(let j = 0; j < checkForced.length; j++) { 
+                        if(splitMsg[i] === checkForced[j]) {
+                            forceCharTier[j] = true;
+                        }
+                    }
+                }
             }
-            console.log("splitmsg[1]: "+ splitMsg[1]);
-            var min = splitMsg[1];
-            var max = splitMsg[1];
+            min = splitMsg[1];
+            max = splitMsg[1];
         }
         // !ironman -f
         else {
-            if (splitMsg[1] === '-f') {
-                forceHighTier = true;
+            console.log("entered here");
+            // Check if anymore arguments exist
+            if (splitMsg.length > 1) {
+                console.log("entered here 2");
+                // If arguments exist, compare them to 'checkForced'
+                for(let i = 1; i < splitMsg.length; i++) {
+                    // If 'splitMsg[i]' is in 'checkForced', set the corresponding boolean to true
+                    for(let j = 0; j < checkForced.length; j++) { 
+                        if(splitMsg[i] === checkForced[j]) {
+                            forceCharTier[j] = true;
+                        }
+                    }
+                }
             }
-            var min = 10.5;
-            var max = 10.5;
+            min = 10.5;
+            max = 10.5;
         }
+
+        console.log("forceCharTier: ", forceCharTier);
 
         // Find a better way to implement commands from the prompt for '-f' setting etc.
         
-        getMatch(message, min, max, forceHighTier);
+        getMatch(message, min, max, forceCharTier);
     }
 });
 
@@ -85,7 +120,7 @@ client.login(token);
 
 // asynchronous functions
 
-async function getMatch(message, min, max, forceHighTier) {
+async function getMatch(message, min, max, forceCharTier) {
 
     let [charName, charValue] = await connectToDatabase();
     console.log(charName, charValue);
@@ -117,12 +152,12 @@ async function getMatch(message, min, max, forceHighTier) {
     // To avoid fence posting, pusht the last binned characters inside 'curBin' to 'charBins'
     charBins.push(curBin);
 
-    console.log(charBins);
+    //console.log(charBins);
     // !!! Check why binTiers doesn't have to be pushed again;
     console.log(binTiers);
 
     let characterList = new CharacterList(charValue, charBins, binTiers);
-    let arrTeamList = characterList.generateTeamBin(min, max, 5, forceHighTier);
+    let arrTeamList = characterList.generateTeamBin(min, max, 5, forceCharTier);
 
     if(!(Array.isArray(arrTeamList))){
         message.channel.send("```" + arrTeamList + "```");
@@ -147,7 +182,7 @@ async function connectToDatabase() {
         rowsName.push(rowsKey[i].name);
     }
 
-    console.log(rowsName, rowsValue);
+    //console.log(rowsName, rowsValue);
 
     return [rowsName, rowsValue];
 }

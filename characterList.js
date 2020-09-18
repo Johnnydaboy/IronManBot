@@ -10,7 +10,7 @@ module.exports = class characterList {
     }
 
     // Return a number of characters based on the min and max ad point values of each character
-    generateTeamBin(min, max, howManyChars, forceHighTier) {
+    generateTeamBin(min, max, howManyChars, forceCharTier) {
         let tempCharValues = [];
 
         for(let i = 0; i < this.charValues.length; i++) {
@@ -35,32 +35,45 @@ module.exports = class characterList {
         let teamArrInt = [];
 
         // Force a higher tier character
+        /*
         if(forceHighTier) {
             tempCharValues.splice(tempCharValues.indexOf(5.5), 1);
         }
+        */
 
+        let level = 0;
         let target = Algorithm.getRandVal(min, max);
         console.log("Before forced: " + target);
 
         // 'target' will be lower if '-f' is enabled
+        /*
         if(forceHighTier) {
             target = target - 5.5;
             console.log("After forced: " + target);
         }
+        */
         
-        let teamToFind = 5;
+        /*
         if(forceHighTier) {
-            teamToFind--;
+            howManyChars--;
         }
+        */
 
-        if(!(Algorithm.isSubsetSum(tempCharValues, tempCharValues.length, target, teamArrInt, 0, teamToFind))) {
-            // Needs to be []
+        [target, level] = this.forceChars(forceCharTier, tempCharValues, teamArrInt, target, level);
+
+        console.log("After forced: ", teamArrInt);
+        console.log("target: ", target);
+        console.log("level: ", level);
+
+        if(!(Algorithm.isSubsetSum(tempCharValues, tempCharValues.length, target, teamArrInt, level, howManyChars))) {
             return "Team composition does not exist";
         }
 
+        /*
         if(forceHighTier) {
             teamArrInt.push(5.5);
         }
+        */
 
         // Get a match and reset the character arrays of different tiers
         var cList = this.getMatch(teamArrInt);
@@ -70,6 +83,50 @@ module.exports = class characterList {
 
         // Figure out a different way to return them as one packet so the error call can still work
         return [cList, teamArrInt];
+    }
+
+    // remove from 'tempCharValues', push into 'teamArrInt'
+    // !!! Comment this code and how you binned into each quartile
+    forceChars(forceCharTier, tempCharValues, teamArrInt, target, level) 
+    {
+        let [q1, q3] = Algorithm.getQuartile(this.binTiers);
+        // High tier
+        if(forceCharTier[0] == true) {
+            let value = Math.floor(Math.random() * (Math.floor(q1) + 1));
+            let forceCharValue = this.binTiers[value];
+            tempCharValues.splice(tempCharValues.indexOf(forceCharValue), 1);
+            teamArrInt.push(forceCharValue);
+
+            target = target - forceCharValue;
+            level++;
+        }
+        // Mid tier
+        if(forceCharTier[1] == true) {
+            let mid = 0;
+            for(let i = Math.floor(q1) + 1; i < Math.ceil(q3); i++) {
+                mid++;
+            }
+
+            let value = Math.floor(Math.random() * mid + (Math.floor(q1) + 1));
+            let forceCharValue = this.binTiers[value];
+            tempCharValues.splice(tempCharValues.indexOf(forceCharValue), 1);
+            teamArrInt.push(forceCharValue);
+
+            target = target - forceCharValue;
+            level++;
+        }
+        // Low tier
+        if(forceCharTier[2] == true) {
+            let value = Math.floor(Math.random() * (this.binTiers.length - Math.ceil(q3)) + Math.ceil(q3));
+            let forceCharValue = this.binTiers[value];
+            tempCharValues.splice(tempCharValues.indexOf(forceCharValue), 1);
+            teamArrInt.push(forceCharValue);
+
+            target = target - forceCharValue;
+            level++;
+        }
+
+        return [target, level];
     }
 
     /*

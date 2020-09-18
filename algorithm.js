@@ -46,11 +46,101 @@ module.exports = class algorithm {
 
     // A method which returns a random value between 'min' and 'max' rounded to the nearest 0.5
     static getRandVal(min, max) {
-        var range = max - min;
-        var value = (Math.random() * range) + min;
+        let range = max - min;
+        let value = (Math.random() * range) + min;
         console.log("not rounded: ", value);
-        var value = Math.round((value * 2))/2.0;
+        value = Math.round((value * 2))/2.0;
         console.log("rounded: ", value);
         return value;   
+    }
+
+    static getQuartile(arr) {
+        let length = arr.length;
+        let lengthQ1 = 0;
+        let lengthQ3 = 0;
+
+        let median = -1;
+
+        // If the dataset is even, the median will be between 2 values in the dataset
+        if(length % 2 == 0) {
+            // To find the middle of an even dataset we will take the left and right value
+            let right = length/2;
+            let left = right - 1;
+            console.log("left index ", left, " is ", arr[left]);
+            console.log("right index ", right, " is ", arr[right]);
+            // Average the two left and right values
+            //median = (arr[left] + arr[right])/2;
+            median = (left + right)/2;
+
+            // The length of the theoretical subarray for Q1 will be the value 'right'
+            lengthQ1 = right;
+            // The start of the theoretical subarray for Q3 will be the value of 'right'
+            lengthQ3 = right;
+        } 
+        // If the dataset is odd, the median will be the center
+        else {
+            // Get the center
+            let middle = (length - 1) / 2;
+            console.log("median index ", middle, " is ", arr[middle]);
+            //median = arr[middle];
+            median = middle;
+
+            // The length of the theoretical subarray for Q1 will be the value 'middle'
+            lengthQ1 = middle;
+            // The start of the theoretical subarray for Q3 will be the value of 'middle' + 1
+            lengthQ3 = middle + 1;
+        }
+
+        console.log("median ", median);
+        console.log("lengthQ1 end ", lengthQ1);
+        console.log("lengthQ3 start", lengthQ3);
+
+        let q1 = -1;
+
+        // If the theoretical subarray is even, Q1 will be between 2 values
+        if(lengthQ1 % 2 == 0) {
+            let right = lengthQ1/2;
+            let left = right - 1;
+            console.log("left index Q1 ", left, " is ", arr[left]);
+            console.log("right index Q1 ", right, " is ", arr[right]);
+            //q1 = (arr[left] + arr[right])/2;
+            q1 = (left + right)/2;
+        } 
+        // If the dataset is odd, Q1 will be the center
+        else {
+            let middle = (lengthQ1 - 1) / 2;
+            console.log("median index Q1 ", middle, " is ", arr[middle]);
+            //q1 = arr[middle];
+            q1 = middle;
+        }
+
+        console.log("q1 ", q1);
+
+        let q3 = -1;
+
+        // If the theoretical subarray is even, Q3 will be between 2 values
+        if((arr.length - lengthQ3) % 2 == 0) {
+            let right = (arr.length + lengthQ3)/2;
+            let left = right - 1;
+            console.log("left index Q3 ", left, " is ", arr[left]);
+            console.log("right index Q3 ", right, " is ", arr[right]);
+            //q3 = (arr[left] + arr[right])/2;
+            q3 = (left + right)/2;
+        } 
+        // If the theoretical subarray if odd, Q3 will be the center
+        else {
+            let middle = (arr.length + lengthQ3 - 1) / 2;
+            console.log("median index Q3 ", middle, " is ", arr[middle]);
+            //q3 = arr[middle];
+            q3 = middle;
+        }
+
+        console.log("q3 ", q3, "\n\n");
+
+        console.log(arr);
+        console.log("median ", median);
+        console.log("q1 ", q1);
+        console.log("q3 ", q3);
+        return[q1, q3];
     }
 }
