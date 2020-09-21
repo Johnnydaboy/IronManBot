@@ -129,7 +129,7 @@ client.login(token);
 async function getMatch(message, min, max, forceCharTier) {
 
     let [charName, charValue] = await connectToDatabase();
-    //console.log(charName, charValue);
+    // Debugging use console.log(charName, charValue); 
 
     // This value stores the arrays of arrays of binned characters
     let charBins = [];
@@ -158,14 +158,14 @@ async function getMatch(message, min, max, forceCharTier) {
     // To avoid fence posting, pusht the last binned characters inside 'curBin' to 'charBins'
     charBins.push(curBin);
 
-    //console.log(charBins);
-    // !!! Check why binTiers doesn't have to be pushed again;
-    //console.log(binTiers);
+    // Debugging use console.log(charBins);
+    // !!! Check why binTiers doesn't have to be pushed again; I'm never going to get to this aren't I?
+    // Debugging use console.log(binTiers);
 
     let characterList = new CharacterList(charValue, charBins, binTiers);
     let arrTeamList = characterList.generateTeamBin(min, max, 5, forceCharTier);
 
-    // Check it it is not an array to send error message
+    // Check if output is not an array to send error message or send the team lists
     if(!(Array.isArray(arrTeamList))){
         message.channel.send("```" + arrTeamList + "```");
     } else {
@@ -179,11 +179,13 @@ async function getMatch(message, min, max, forceCharTier) {
     }
 }
 
+// Asyncronous function to connect to mysql database
 async function connectToDatabase() {
 
     let rowsKey = await sequelize.query("SELECT * FROM characters", { type: QueryTypes.SELECT });
     let rowsValue = [];
     let rowsName = [];
+    // Push values and names of each character in the query into an array
     for(let i = 0; i < rowsKey.length; i++) {
         rowsValue.push(rowsKey[i].value);
         rowsName.push(rowsKey[i].name);

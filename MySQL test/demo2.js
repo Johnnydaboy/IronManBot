@@ -32,7 +32,7 @@ async function connectToDatabase1() {
 	const connection = await mysql.createConnection({
 		host     : 'localhost',
 		user     : 'jonathan',
-		password : '0@MIjR$K!BEZ',
+		password : mysqlPass,
 		database : 'test',
 	});
 
