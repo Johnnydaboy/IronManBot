@@ -1,4 +1,6 @@
 # IronManBot
+IronManBot is a simple discord bot made for the video game Super Smash Bros. Melee to play Ironman style matches. An ironman style match is where two players play through a set of characters until one player defeats all opposing player's characters. The IronMan bot takes into consideration different tiering of a specific video games characters in order to create balanced randomly picked teams for two players to play Ironman style matches.
+
 5v5? No problem, 6v6? No problem! Friend too trash at a certain fighting game? 1v6? N O   P R O B L E M.
 
 Add the bot here: https://discord.com/api/oauth2/authorize?client_id=752428169658892368&permissions=0&scope=bot
